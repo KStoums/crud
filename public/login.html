@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/image/favicon.png">
+    <link href="./assets/css/style.css" rel="stylesheet">
+    <title>Crud - Login</title>
+</head>
+<body>
+    <header>
+        <img src="./assets/image/logo.jpg" class="logo" alt="Crud">
+        <div class="button-wrap">
+            <a href="#">
+                <p>Home</p>
+            </a>
+            <a href="#">
+                <p>Services</p>
+            </a>
+            <a href="#">
+                <p>Team</p>
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-user"></i>
+            </a>
+        </div>
+    </header>
+    <main>
+        <h1 class="page-title">Login</h1>
+        <p class="page-subtitle">Please enter your login details</p>
+        <div class="input-wrap">
+            <p class="input-title">Email address</p>
+            <input placeholder="random@crud.com" id="email">
+            <p class="input-title">Password</p>
+            <input type="password" placeholder="*********" id="password">
+        </div>
+        <div class="button-wrap">
+            <a href="javascript:login()" id="login">
+                <p class="button">Sign in</p>
+            </a>
+            <div class="button-separator-wrap">
+                <div class="button-separator-line"></div>
+                <p>Or...</p>
+                <div class="button-separator-line"></div>
+            </div>
+            <a href="./register.html" id="register">
+                <p class="button">Create account</p>
+            </a>
+        </div>
+        <div class="error-success-block hidden" id="error-success-block"></div>
+    </main>
+
+    <script src="./assets/js/utils.js"></script>
+    <script src="./assets/js/login.js"></script>
+    <script src="https://kit.fontawesome.com/11ef202400.js" crossorigin="anonymous"></script>
+</body>
+</html>

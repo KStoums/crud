@@ -1,0 +1,133 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Exo 2', sans-serif;
+}
+
+body {
+    background-color: #F3F4F6;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #1F2025;
+    height: 100px;
+    width: 100vw;
+}
+
+header p, a {
+    color: white;
+    text-decoration: none;
+}
+
+header .logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+header .button-wrap {
+    display: flex;
+    gap: 20px;
+}
+
+main .page-title {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 100px;
+    color: black;
+    font-size: 40px;
+}
+
+main .page-subtitle {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+}
+
+main .input-wrap {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 50px;
+}
+
+main .input-title {
+    display: flex;
+    justify-content: start;
+    font-size: 13px;
+}
+
+main input {
+    width: 300px;
+    height: 20px;
+    border: 2px solid #E5E7EB;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+main .button-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 30px;
+    color: white;
+    gap: 10px;
+}
+
+main .button:hover {
+    transition-property: background-color;
+    transition-duration: 0.2s;
+    background-color: gray;
+}
+
+main .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    background-color: black;
+    padding: 5px;
+    height: 20px;
+    width: 300px;
+}
+
+main .button-separator-wrap {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: black;
+    gap: 5px;
+}
+
+main .button-separator-line {
+    height: 1px;
+    width: 50px;
+    background-color: gray;
+}
+
+.error-success-block {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    bottom: 0;
+    color: white;
+    opacity: 0.7;
+}
+
+.hidden {
+    display: none !important;
+}
