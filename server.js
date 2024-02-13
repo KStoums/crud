@@ -2,7 +2,7 @@ const fastify = require('fastify')({ logger: true });
 const fastifyCookie = require('fastify-cookie');
 const cors = require('@fastify/cors');
 const { startMongoClient } = require("./mongodb.js");
-const { loginRoute, registerRoute, meRoute, disconnectRoute } = require("./routes.js");
+const { loginRoute, registerRoute, meRoute, disconnectRoute, editPasswordRoute } = require("./routes.js");
 
 checkEnvironments();
 
@@ -34,6 +34,9 @@ async function startHttpServer() {
 
         fastify.route(disconnectRoute);
         console.info("> \"/disconnect\" route registered!");
+
+        fastify.route(editPasswordRoute);
+        console.info("> \"/password\" route registered!");
 
         await fastify.listen({port: process.env.HTTP_PORT});
         console.info("> Http server started!")

@@ -37,7 +37,7 @@ main .page-title {
     display: flex;
     justify-content: center;
     text-align: center;
-    margin-top: 100px;
+    margin-top: 5%;
     color: black;
     font-size: 40px;
 }
@@ -112,6 +112,71 @@ main .button-separator-wrap {
 main .button-separator-line {
     height: 1px;
     width: 50px;
+    background-color: gray;
+}
+
+.second-page-input-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background-color: rgb(0, 0, 0, .8);
+    height: 100%;
+    width: 100%;
+}
+
+.second-page-input-background .second-page-input-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 300px;
+    width: 50%;
+    background-color: rgb(255, 255, 255, 1);
+    border-radius: 5px;
+    gap: 15px;
+}
+
+.second-page-input-background .second-page-input-title {
+    display: flex;
+    justify-content: start;
+    font-size: 13px;
+}
+
+.second-page-input-background input {
+    border-radius: 5px;
+    border: 1px solid #E5E7EB;
+    height: 30%;
+    width: 30vw;
+    padding: 5px;
+}
+
+.second-page-input-background .button-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.second-page-input-background .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    border: 0;
+    background-color: black;
+    color: white;
+    padding: 5px;
+    height: 80%;
+    width: 20vw;
+}
+
+.second-page-input-background .button:hover {
+    transition-property: background-color;
+    transition-duration: 0.2s;
     background-color: gray;
 }
 

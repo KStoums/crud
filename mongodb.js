@@ -18,7 +18,6 @@ async function getUserByEmail(email) {
     try {
         return await mongoDbClient.db("crud").collection("users").findOne({email: email});
     } catch (error) {
-        console.error("> Error when find user in mongodb: " + error);
         return null;
     }
 }
@@ -27,7 +26,6 @@ async function getUserByUsername(username) {
     try {
         return await mongoDbClient.db("crud").collection("users").findOne({username: username});
     } catch (error) {
-        console.error("> Error when find user in mongodb: " + error);
         return null;
     }
 }
@@ -43,9 +41,24 @@ async function createUser(username, email, password) {
         await mongoDbClient.db("crud").collection("users").insertOne(newUser);
         return true;
     } catch (error) {
-        console.error("Error when insert new user into mongodb: " + error);
         return false;
     }
 }
 
-module.exports = { startMongoClient, getUserByEmail, getUserByUsername, createUser }
+async function editUserPassword(email, hashedNewPassword) {
+    try {
+        let user = await getUserByEmail(email);
+
+        if (user === null) {
+            return false;
+        }
+
+        user.password = hashedNewPassword;
+        await user.updateOne;
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+module.exports = { startMongoClient, getUserByEmail, getUserByUsername, createUser, editUserPassword }

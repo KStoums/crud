@@ -1,6 +1,6 @@
 const { userModel } = require("./model.js");
 const { hashPassword, compareHash, createJwtToken } = require("./utils.js");
-const { getUserByEmail, getUserByUsername, createUser } = require("./mongodb.js");
+const { getUserByEmail, getUserByUsername, createUser, editUserPassword } = require("./mongodb.js");
 const {verify} = require("jsonwebtoken");
 
 const loginRoute = {
@@ -9,12 +9,6 @@ const loginRoute = {
     schema: {
         response: {
             200: {},
-            404: {
-                type: 'object',
-                properties: {
-                    error: { type: 'string' }
-                }
-            },
             400: {
                 type: 'object',
                 properties: {
@@ -25,11 +19,14 @@ const loginRoute = {
     },
     handler: async function loginHandler(request, response) {
         const {email, password} = request.body;
+
+        console.log(email, password);
+
         const hashedPassword = await hashPassword(password);
         const user = await getUserByEmail(email);
 
         if (user === null) {
-            response.status(404).send({error: "Email address or password do not match or account does not exist"});
+            response.status(400).send({error: "Email address or password do not match or account does not exist"});
             return;
         }
 
@@ -58,13 +55,13 @@ const registerRoute = {
     schema: {
         response: {
             200: {},
-            404: {
+            400: {
                 type: 'object',
                 properties: {
                     error: { type: 'string' }
                 }
             },
-            400: {
+            500: {
                 type: 'object',
                 properties: {
                     error: { type: 'string' }
@@ -85,14 +82,14 @@ const registerRoute = {
             }
 
             if (!await createUser(username, email, password)) {
-                response.status(400).send({error: "Error when add user into mongodb"});
+                response.status(500).send({error: "Error when add user into mongodb"});
                 return;
             }
 
             response.send(200);
         } catch (error) {
             console.error("Error when check or create new user into mongodb: " + error);
-            response.status(400).send({error: "Error when check or create new user into mongodb: " + error});
+            response.status(500).send({error: "Error when check or create new user into mongodb: " + error});
         }
     }
 }
@@ -103,12 +100,6 @@ const meRoute = {
     schema: {
         response: {
             200: {},
-            419: {
-                type: 'object',
-                properties: {
-                    error: { type: 'string' }
-                }
-            },
         }
     },
     preHandler: middleware,
@@ -123,7 +114,32 @@ const disconnectRoute = {
     schema: {
         response: {
             200: {},
-            419: {
+        }
+    },
+    preHandler: middleware,
+    handler: async function disconnectHandler(request, response) {
+        response.setCookie("crud", "", {
+            path: "/",
+            domain: process.env.ROOT_DOMAIN,
+            expires: new Date(Date.now() -1),
+            httpOnly: true,
+        }).send(200);
+    }
+}
+
+const editPasswordRoute = {
+    method: 'POST',
+    url: '/password',
+    schema: {
+        response: {
+            200: {},
+            400: {
+                type: 'object',
+                properties: {
+                    error: { type: 'string' }
+                }
+            },
+            500: {
                 type: 'object',
                 properties: {
                     error: { type: 'string' }
@@ -132,13 +148,29 @@ const disconnectRoute = {
         }
     },
     preHandler: middleware,
-    handler: async function meHandler(request, response) {
-        response.setCookie("crud", "", {
-            path: "/",
-            domain: process.env.ROOT_DOMAIN,
-            expires: new Date(Date.now() -1),
-            httpOnly: true,
-        }).send(200);
+    handler: async function editPasswordHandler(request, response) {
+        const crudCookie = request.cookies["crud"];
+        const {email} = verify(crudCookie, process.env.JWT_SECRET);
+
+        try {
+            const { newPassword } = request.body;
+
+            if (newPassword === "") {
+                response.status(400).send({error:"Error password is not defined"});
+                return;
+            }
+
+            const hashedNewPassword = await hashPassword(newPassword);
+
+            if (!await editUserPassword(email, hashedNewPassword)){
+                response.status(500).send({error:"Error when update user into mongodb"});
+                return;
+            }
+
+            response.send(200);
+        } catch (error) {
+            response.status(500).send({error:"Error when try to get user into mongodb: " + error});
+        }
     }
 }
 
@@ -160,11 +192,11 @@ async function middleware(request, response, next) {
             return;
         }
     } catch (error) {
-        response.status(400).send({error:"Error when get user into mongodb: " + error});
+        response.status(500).send({error:"Error when get user into mongodb: " + error});
         return;
     }
 
     next();
 }
 
-module.exports = { loginRoute, registerRoute, meRoute, disconnectRoute };
+module.exports = { loginRoute, registerRoute, meRoute, disconnectRoute, editPasswordRoute };
