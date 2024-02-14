@@ -41,8 +41,8 @@ async function disconnect() {
 }
 
 function editPassword() {
-    const secondPage = document.getElementById("second-page");
-    secondPage.classList.toggle("hidden");
+    const popup = document.getElementById("popup");
+    popup.classList.toggle("hidden");
 }
 
 async function sendNewPassword() {
@@ -80,8 +80,8 @@ async function sendNewPassword() {
 
 
 function cancelEditPassword() {
-    const secondPage = document.getElementById("second-page");
-    secondPage.classList.toggle("hidden");
+    const popup = document.getElementById("popup");
+    popup.classList.toggle("hidden");
 }
 
 async function deleteAccount() {

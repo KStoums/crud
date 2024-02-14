@@ -115,7 +115,7 @@ main .button-separator-line {
     background-color: gray;
 }
 
-.second-page-input-background {
+.popup-input-background {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -125,7 +125,7 @@ main .button-separator-line {
     width: 100%;
 }
 
-.second-page-input-background .second-page-input-block {
+.popup-input-background .popup-input-block {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -139,13 +139,13 @@ main .button-separator-line {
     gap: 15px;
 }
 
-.second-page-input-background .second-page-input-title {
+.popup-input-background .popup-input-title {
     display: flex;
     justify-content: start;
     font-size: 13px;
 }
 
-.second-page-input-background input {
+.popup-input-background input {
     border-radius: 5px;
     border: 1px solid #E5E7EB;
     height: 30%;
@@ -153,14 +153,14 @@ main .button-separator-line {
     padding: 5px;
 }
 
-.second-page-input-background .button-wrap {
+.popup-input-background .button-wrap {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.second-page-input-background .button {
+.popup-input-background .button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -174,7 +174,7 @@ main .button-separator-line {
     width: 20vw;
 }
 
-.second-page-input-background .button:hover {
+.popup-input-background .button:hover {
     transition-property: background-color;
     transition-duration: 0.2s;
     background-color: gray;

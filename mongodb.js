@@ -1,31 +1,37 @@
-const { MongoClient } = require("mongodb");
-const { userModel } = require("./model");
-const { hashPassword } = require("./utils.js");
+const {MongoClient} = require("mongodb");
+const {userModel} = require("./model");
+const {hashPassword, compareHash} = require("./utils");
 
-let mongoDbClient;
+let mongoClient;
 
 async function startMongoClient() {
     try {
-        const client = new MongoClient(process.env.MONGODB_URI);
-        console.info("> Mongo client connected!")
-        mongoDbClient = client;
+        mongoClient = new MongoClient(process.env.MONGODB_URI);
+        return true;
     } catch (error) {
         console.error("> Error when start mongo client: " + error);
+        return false;
     }
+}
+
+function getUsersCollection() {
+    return mongoClient.db("crud").collection("users");
 }
 
 async function getUserByEmail(email) {
     try {
-        return await mongoDbClient.db("crud").collection("users").findOne({email: email});
+        return await getUsersCollection().findOne({email: email});
     } catch (error) {
+        console.error("> Error when find user in mongodb: " + error);
         return null;
     }
 }
 
 async function getUserByUsername(username) {
     try {
-        return await mongoDbClient.db("crud").collection("users").findOne({username: username});
+        return await getUsersCollection().findOne({username: username});
     } catch (error) {
+        console.error("> Error when find user in mongodb: " + error);
         return null;
     }
 }
@@ -38,27 +44,32 @@ async function createUser(username, email, password) {
         newUser.email = email;
         newUser.password = await hashPassword(password);
 
-        await mongoDbClient.db("crud").collection("users").insertOne(newUser);
+        await getUsersCollection().insertOne(newUser);
         return true;
     } catch (error) {
+        console.error("Error when insert new user into mongodb: " + error);
         return false;
     }
 }
 
-async function editUserPassword(email, hashedNewPassword) {
+async function editUserPassword(email, newPassword) {
+    let user = await getUserByEmail(email);
+
+    if (user === null) {
+        throw new Error("User not found into mongodb");
+    }
+
+    const isEqual = await compareHash(newPassword, user.password);
+
+    if (isEqual) {
+        throw new Error("Old password is equal to new");
+    }
+
     try {
-        let user = await getUserByEmail(email);
-
-        if (user === null) {
-            return false;
-        }
-
-        user.password = hashedNewPassword;
-        await user.updateOne;
-        return true;
+        await getUsersCollection().updateOne({email: email}, {$set: {password: await hashPassword(newPassword)}});
     } catch (error) {
-        return false;
+        throw error;
     }
 }
 
-module.exports = { startMongoClient, getUserByEmail, getUserByUsername, createUser, editUserPassword }
+module.exports = { getUserByEmail, getUserByUsername, createUser, editUserPassword, startMongoClient }
