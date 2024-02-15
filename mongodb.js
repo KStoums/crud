@@ -72,4 +72,20 @@ async function editUserPassword(email, newPassword) {
     }
 }
 
-module.exports = { getUserByEmail, getUserByUsername, createUser, editUserPassword, startMongoClient }
+async function deleteUser(email) {
+    try {
+        const user = getUserByEmail(email);
+
+        if (user === null) {
+            return false;
+        }
+
+        await getUsersCollection().deleteOne({email: email});
+        return true;
+    } catch (error) {
+        console.log("Error when get user into mongodb: " + error)
+        return false;
+    }
+}
+
+module.exports = {getUserByEmail, getUserByUsername, createUser, editUserPassword, startMongoClient, deleteUser}

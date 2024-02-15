@@ -1,5 +1,5 @@
 const {hashPassword, compareHash, createJwtToken} = require('./utils');
-const {getUserByEmail, getUserByUsername, createUser, editUserPassword} = require('./mongodb');
+const {getUserByEmail, getUserByUsername, createUser, editUserPassword, deleteUser} = require('./mongodb');
 const {verify} = require('jsonwebtoken');
 
 const loginRoute = {
@@ -182,6 +182,52 @@ const editPasswordRoute = {
     }
 }
 
+const deleteAccountRoute = {
+    method: 'POST',
+    url: '/delete',
+    schema: {
+        response: {
+            200: {},
+            400: {
+                type: 'object',
+                properties: {
+                    error: { type: 'string' }
+                }
+            },
+            500: {
+                type: 'object',
+                properties: {
+                    error: { type: 'string' }
+                }
+            },
+        }
+    },
+    preHandler: middleware,
+    handler: async function deleteAccountRoute(request, response) {
+        const crudCookie = request.cookies["crud"];
+        const {email} = verify(crudCookie, process.env.JWT_SECRET);
+
+        try {
+            const isDeleted = await deleteUser(email);
+
+            if (!isDeleted) {
+                response.status(500).send("Error when delete user account into mongodb");
+                return;
+            }
+
+            response.setCookie("crud", "", {
+                path: "/",
+                domain: process.env.ROOT_DOMAIN,
+                expires: new Date(Date.now() -1),
+                httpOnly: true,
+            }).send(200);
+        } catch (error) {
+            console.log("Error when delete user into mongodb: " + error);
+            response.status(500).send("Error when delete user account into mongodb");
+        }
+    }
+}
+
 async function middleware(request, response, next) {
     const crudCookie = request.cookies["crud"];
 
@@ -207,4 +253,4 @@ async function middleware(request, response, next) {
     next();
 }
 
-module.exports = {loginRoute, registerRoute, disconnectRoute, meRoute, editPasswordRoute};
+module.exports = {loginRoute, registerRoute, disconnectRoute, meRoute, editPasswordRoute, deleteAccountRoute};

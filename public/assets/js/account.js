@@ -85,7 +85,26 @@ function cancelEditPassword() {
 }
 
 async function deleteAccount() {
-    //Implements logic
+    try {
+        const response = await fetch("http://localhost:3000/delete", {
+            method: "POST",
+            credentials: "include",
+        });
+
+        const responseJson = await response.json();
+
+        if (!response.ok) {
+            sendError("Error: " + responseJson["error"]);
+            return;
+        }
+
+        sendSuccess("Your account has been deleted with successfully! Redirect to login page in a few seconds");
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 3000);
+    } catch (error) {
+        sendError("Error: An error has occurred, please try again later");
+    }
 }
 
 async function checkIfLogged() {

@@ -2,7 +2,7 @@ const fastify = require('fastify')({ logger: true });
 const fastifyCookie = require('@fastify/cookie');
 const cors = require('@fastify/cors');
 const { startMongoClient } = require("./mongodb");
-const {loginRoute, registerRoute, disconnectRoute, meRoute, editPasswordRoute} = require('./routes');
+const {loginRoute, registerRoute, disconnectRoute, meRoute, editPasswordRoute, deleteAccountRoute} = require('./routes');
 
 async function main() {
     if (process.env.HTTP_PORT === undefined || process.env.MONGODB_URI === undefined ||
@@ -29,7 +29,7 @@ async function main() {
 
         fastify.register(fastifyCookie);
 
-        const routes = [loginRoute, registerRoute, meRoute, disconnectRoute, editPasswordRoute];
+        const routes = [loginRoute, registerRoute, meRoute, disconnectRoute, editPasswordRoute, deleteAccountRoute];
         routes.forEach(route => {
             fastify.route(route);
         })
